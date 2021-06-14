@@ -1,0 +1,21 @@
+sudo: false
+env:
+  global:
+  - PATH="$HOME/.local/bin:$PATH"
+  - REGULA_VERSION=v0.9.1
+  - REGULA_DIR="$HOME/.local/bin/regula"
+
+before_script:
+- mkdir "$HOME/.local/bin"
+
+# Install regula
+- curl -L "https://github.com/fugue/regula/archive/$REGULA_VERSION.tar.gz" | tar -xvz --strip-components=1 -C "$REGULA_DIR"
+
+script:
+# Run regula
+- REGULA_OUTPUT="$(mktemp)"
+- (regula run -i config.rego || true) | tee "$REGULA_OUTPUT"
+- REGULA_RULES_PASSED="$(jq -r '.summary.rule_results.PASS' "$REGULA_OUTPUT")"
+- REGULA_RULES_FAILED="$(jq -r '.summary.rule_results.FAIL' "$REGULA_OUTPUT")"
+- echo "${REGULA_RULES_PASSED} rules passed, ${REGULA_RULES_FAILED} rules failed" >&2
+- if [[ "$REGULA_RULES_FAILED" -gt 0 ]]; then exit 1; fi
