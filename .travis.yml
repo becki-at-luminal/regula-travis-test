@@ -8,7 +8,7 @@ before_script:
 - mkdir "$HOME/.local/bin"
 
 # Install regula
-- curl -L "https://github.com/fugue/regula/releases/download/v$REGULA_VERSION/regula_$REGULA_VERSION_Linux_x86_64.tar.gz" | tar -xvf -C "$HOME/.local/bin"
+- curl -L "https://github.com/fugue/regula/releases/download/v${REGULA_VERSION}/regula_${REGULA_VERSION}_Linux_x86_64.tar.gz" | tar -xvz -C "$HOME/.local/bin"
 
 script:
 # Run regula
