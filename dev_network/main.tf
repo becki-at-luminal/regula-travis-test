@@ -1,7 +1,11 @@
+# EXAMPLE VULNERABLE TERRAFORM FOR LEARNING PURPOSES ONLY
+# Intentionally opens port 22 to the internet!
+
 provider "azurerm" {
   features {}
 }
 
+# Random string to generate a unique storage account name
 resource "random_string" "seed" {
   length = 16
   special = false
@@ -23,6 +27,7 @@ resource "azurerm_network_security_group" "devnsg" {
   location            = "${azurerm_resource_group.main.location}"
   resource_group_name = "${azurerm_resource_group.main.name}"
 
+  # Port 22 is open to the world. Don't do this in real life!
   security_rule {
     name                        = "dev-nsg-rule"
     priority                    = 100
@@ -31,7 +36,7 @@ resource "azurerm_network_security_group" "devnsg" {
     protocol                    = "Tcp"
     source_port_range           = "*"
     destination_port_ranges     = ["22"]
-    source_address_prefixes     = ["10.0.0.0"]
+    source_address_prefixes     = ["0.0.0.0"]
     destination_address_prefix  = "*"
   }
 
@@ -63,7 +68,7 @@ resource "azurerm_virtual_network" "main" {
 }
 
 resource "azurerm_network_watcher" "main" {
-  name                = "${random_string.seed.result}-westus3-watcher"
+  name                = "${random_string.seed.result}-eastus2-watcher"
   location            = "${azurerm_resource_group.main.location}"
   resource_group_name = "${azurerm_resource_group.main.name}"
 
@@ -109,6 +114,7 @@ resource "azurerm_network_watcher_flow_log" "main" {
   }
 }
 
+# Storage account to hold the flow logs
 resource "azurerm_storage_account" "main" {
   name                = "sa${random_string.seed.result}"
   resource_group_name = "${azurerm_resource_group.main.name}"
