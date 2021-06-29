@@ -1,5 +1,5 @@
 # EXAMPLE VULNERABLE TERRAFORM FOR LEARNING PURPOSES ONLY
-# Intentionally opens port 22 to the internet! 
+# Intentionally opens port 22 to the internet!
 
 provider "azurerm" {
   features {}
@@ -36,7 +36,7 @@ resource "azurerm_network_security_group" "devnsg" {
     protocol                    = "Tcp"
     source_port_range           = "*"
     destination_port_ranges     = ["22"]
-    source_address_prefixes     = ["0.0.0.0"]
+    source_address_prefixes     = ["10.0.0.0/16"]
     destination_address_prefix  = "*"
   }
 
