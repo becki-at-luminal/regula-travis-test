@@ -1,5 +1,5 @@
 # EXAMPLE VULNERABLE TERRAFORM FOR LEARNING PURPOSES ONLY
-# Intentionally opens port 22 to the internet!
+# Intentionally opens port 22 to the internet! 
 
 provider "azurerm" {
   features {}
